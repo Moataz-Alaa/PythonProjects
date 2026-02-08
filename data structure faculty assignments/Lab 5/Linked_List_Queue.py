@@ -1,0 +1,128 @@
+
+def analyseInput():
+    inputString = input()
+    cleanedInput = inputString[1:len(inputString)-1]
+    if (len(cleanedInput) == 0):
+        return []
+    cleanedInput = cleanedInput.split(', ')
+    arr = [0]*len(cleanedInput)
+    for i in range(len(cleanedInput)):
+        arr[i] = int(cleanedInput[i])
+    return arr
+
+class Node:
+    def __init__(self, value=None):
+        self.value = value
+        self.next = None
+
+class LinkedList:
+    
+    def __init__(self, initial_nodes_values=[]):
+        if len(initial_nodes_values) == 0:
+            self.head = None
+            self.tail = None
+        elif len(initial_nodes_values) == 1:
+            self.head = self.tail = Node(initial_nodes_values[0])
+        else:
+            self.head = Node(initial_nodes_values[0])
+            temp_node = self.head
+            for i in range(1, len(initial_nodes_values) - 1):
+                new_node = Node(initial_nodes_values[i])
+                temp_node.next = new_node
+                temp_node = new_node
+            self.tail = Node(initial_nodes_values[len(initial_nodes_values) - 1])
+            temp_node.next = self.tail
+        self.length = len(initial_nodes_values)
+
+    def __str__(self):
+        temp_node = self.head
+        result = '['
+        while temp_node is not None:
+            result += (str(temp_node.value))
+            if temp_node.next is not None:
+                result += ', '
+            temp_node = temp_node.next
+        result += ']'
+        return result
+
+    def prepend(self, value):
+        new_node = Node(value)
+        if self.head is None:
+            self.head = new_node
+            self.tail = new_node
+        else:
+            new_node.next = self.head
+            self.head = new_node
+        self.length += 1
+
+    def pop(self):
+            if self.length == 0:
+                return None
+            popped_node = self.tail
+            if self.length == 1:
+                self.head = None
+                self.tail = None
+            else:
+                temp = self.head
+                while temp.next is not self.tail:
+                    temp = temp.next
+                temp.next = None
+                self.tail = temp
+            self.length -= 1
+            return popped_node.value
+
+
+class Queue:
+    
+    def __init__(self, values=[]):
+        self.queueList = LinkedList(values)
+
+    def __str__(self):
+        return self.queueList.__str__()
+
+    def enqueue(self, value):
+        self.queueList.prepend(value)
+
+    def dequeue(self):
+        if self.isEmpty():
+            raise
+        return self.queueList.pop()
+    
+    def front(self):
+        if self.isEmpty():
+            raise
+        return self.queueList.tail.value
+    
+    def isEmpty(self):
+        if self.queueList.head == None:
+            return True
+        else:
+            return False
+    
+    def size(self):
+        return self.queueList.length
+    
+    def selectOperation(self):
+        try:
+            operation = input()
+            if operation == "enqueue":
+                value = int(input())
+                self.enqueue(value)
+                print(self)
+            elif operation == "dequeue":
+                self.dequeue()
+                print(self)
+            elif operation == "isEmpty":
+                print(self.isEmpty())
+            elif operation == "size":
+                print(self.size())
+            else:
+                print("Error")
+        except:
+            print("Error")
+            return
+
+
+
+testStack = Queue(analyseInput())
+testStack.selectOperation()
